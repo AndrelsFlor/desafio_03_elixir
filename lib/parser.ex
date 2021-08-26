@@ -1,17 +1,17 @@
 defmodule GenReport.Parser do
   @months %{
-    "1" => "Janeiro",
-    "2" => "Fevereiro",
-    "3" => "Março",
-    "4" => "Abril",
-    "5" => "Maio",
-    "6" => "Junho",
-    "7" => "Julho",
-    "8" => "Agosto",
-    "9" => "Setembro",
-    "10" => "Outubro",
-    "11" => "Novembro",
-    "12" => "Dezembro"
+    "1" => "janeiro",
+    "2" => "fevereiro",
+    "3" => "março",
+    "4" => "abril",
+    "5" => "maio",
+    "6" => "junho",
+    "7" => "julho",
+    "8" => "agosto",
+    "9" => "setembro",
+    "10" => "outubro",
+    "11" => "novembro",
+    "12" => "dezembro"
   }
 
   def parse_file(filename) do
@@ -27,6 +27,7 @@ defmodule GenReport.Parser do
     |> List.update_at(1, &String.to_integer/1)
     |> List.update_at(2, &String.to_integer/1)
     |> List.update_at(4, &String.to_integer/1)
+    |> List.update_at(0, &String.downcase/1)
     |> get_month_name()
 
     # |> generate_line_map()

@@ -1,32 +1,32 @@
 defmodule GenReport do
   @months [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro"
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro"
   ]
 
   @years [2016, 2017, 2018, 2019, 2020]
 
   @names [
-    "Cleiton",
-    "Daniele",
-    "Danilo",
-    "Diego",
-    "Giuliano",
-    "Jakeliny",
-    "Joseph",
-    "Mayk",
-    "Rafael",
-    "Vinicius"
+    "cleiton",
+    "daniele",
+    "danilo",
+    "diego",
+    "giuliano",
+    "jakeliny",
+    "joseph",
+    "mayk",
+    "rafael",
+    "vinicius"
   ]
   alias GenReport.Parser
 
@@ -37,11 +37,31 @@ defmodule GenReport do
     |> Enum.reduce(zeroed_reports(), fn line, report -> sum_hours(line, report) end)
   end
 
+  def build do
+    {:error, "Insira o nome de um arquivo"}
+  end
+
   defp sum_hours(line, report) do
-    [name, hours, _month_day, _month_name, _year] = line
-    %{"all_hours" => all_hours} = report
+    [name, hours, _month_day, month_name, year] = line
+
+    %{
+      "all_hours" => all_hours,
+      "hours_per_month" => hours_per_month,
+      "hours_per_year" => hours_per_year
+    } = report
+
     all_hours = Map.put(all_hours, name, all_hours[name] + hours)
-    %{"all_hours" => all_hours}
+
+    hours_per_month =
+      put_in(hours_per_month, [name, month_name], hours_per_month[name][month_name] + hours)
+
+    hours_per_year = put_in(hours_per_year, [name, year], hours_per_year[name][year] + hours)
+
+    %{
+      "all_hours" => all_hours,
+      "hours_per_month" => hours_per_month,
+      "hours_per_year" => hours_per_year
+    }
   end
 
   defp zeroed_reports() do
